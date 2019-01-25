@@ -32,9 +32,30 @@ public class Moves {
 	 */
 	public Moves(int n) {
 		moves = new DynamicArray();
-			
 
-		generateMoves();
+		// initialize the instance variables(job of a constructor)
+
+		// list to keep track of "left" peg
+		left = new DynamicArray();
+		// middle peg
+		center = new DynamicArray();
+		// right peg
+		right = new DynamicArray();
+
+		// based on the number of disks(n)
+		// add the correct number and order of "disks" on the left "peg"
+
+		int size = n;
+		int sum = 0;
+		// add the numbers so that the biggest one is first
+		while (size > 0) { // the following numbers are always smaller than the
+							// previous
+			left.add(size); // adding all discs together
+			sum++;
+			size--; // decrementing size
+		}
+
+		generateMoves(n);
 
 	}
 
@@ -56,20 +77,159 @@ public class Moves {
 	 * legal move between pegs A and C (in either direction) make the legal move
 	 * between pegs B and C (in either direction) repeat until complete
 	 */
-	public void generateMoves() {
+	public void generateMoves(int n) {
 		System.out.println("Generating moves");
-		
-		//each pair corresponds to a move from one peg to the other
-		moves.add(0);	//source peg
-		moves.add(1);	//destination
-			
-		moves.add(0);	//source peg
-		moves.add(2);	//destination
-		
-		moves.add(0);	//source peg
-		moves.add(2);	//destination
-		
 
+		// odd disks
+		if (n % 2 != 0) {
+			for (int i = 0; i < (Math.pow(2, n) / 3) - 1; i++) {
+
+				// step 1
+				// try A -> C
+				if (right.getLast() > left.getLast()) {
+					moves.add(0); // source peg
+					moves.add(2); // destination
+
+					// add to the end of right
+					// the element you removed
+					// from the end of left
+					right.add(left.remove());
+				} else if (left.getLast() > right.getLast()) {
+					// if a->c is not possible, try c->a
+					moves.add(2); // source peg
+					moves.add(0); // destination
+
+					// add to the end of left
+					// the element you removed
+					// from the end of right
+					left.add(right.remove());
+				}
+				// A -> B
+				if (center.getLast() > left.getLast()) {
+					moves.add(0); // source peg
+					moves.add(1); // destination
+
+					// add to the end of middle
+					// the element you removed
+					// from the end of left
+					center.add(left.remove());
+				} else if (left.getLast() > center.getLast()) {
+					// if a->c is not possible, try c->a
+					moves.add(1); // source peg
+					moves.add(0); // destination
+
+					// add to the end of left
+					// the element you removed
+					// from the end of center
+					left.add(center.remove());
+				}
+
+				// C->B
+				if (center.getLast() > right.getLast()) {
+					moves.add(2); // source peg
+					moves.add(1); // destination
+
+					// add to the end of center
+					// the element you removed
+					// from the end of right
+					center.add(right.remove());
+				} else if (right.getLast() > center.getLast()) {
+					// if a->c is not possible, try c->a
+					moves.add(1); // source peg
+					moves.add(2); // destination
+
+					// add to the end of right
+					// the element you removed
+					// from the end of center
+					right.add(center.remove());
+				}
+			}
+			// try A -> C
+			if (right.getLast() > left.getLast()) {
+				moves.add(0); // source peg
+				moves.add(2); // destination
+
+				// add to the end of right
+				// the element you removed
+				// from the end of left
+				right.add(left.remove());
+			} else if (left.getLast() > right.getLast()) {
+				// if a->c is not possible, try c->a
+				moves.add(2); // source peg
+				moves.add(0); // destination
+
+				// add to the end of left
+				// the element you removed
+				// from the end of right
+				left.add(right.remove());
+			}
+
+		} else {
+
+			for (int i = 0; i < (Math.pow(2, n) / 3) -1; i++) {
+				// step 1
+				// try A -> B
+
+				if (center.getLast() > left.getLast()) {
+					moves.add(0); // source peg
+					moves.add(1); // destination
+
+					// add to the end of right
+					// the element you removed
+					// from the end of left
+					center.add(left.remove());
+				} else if (left.getLast() > center.getLast()) {
+					// if a->c is not possible, try c->a
+					moves.add(1); // source peg
+					moves.add(0); // destination
+
+					// add to the end of left
+					// the element you removed
+					// from the end of right
+					left.add(center.remove());
+				}
+				// try A -> C
+
+				if (right.getLast() > left.getLast()) {
+					moves.add(0); // source peg
+					moves.add(2); // destination
+
+					// add to the end of right
+					// the element you removed
+					// from the end of left
+					right.add(left.remove());
+				} else if (left.getLast() > right.getLast()) {
+					// if a->c is not possible, try c->a
+					moves.add(2); // source peg
+					moves.add(0); // destination
+
+					// add to the end of left
+					// the element you removed
+					// from the end of right
+					left.add(right.remove());
+				}
+
+				// C->B
+				if (center.getLast() > right.getLast()) {
+					moves.add(2); // source peg
+					moves.add(1); // destination
+
+					// add to the end of center
+					// the element you removed
+					// from the end of right
+					center.add(right.remove());
+				} else if (right.getLast() > center.getLast()) {
+					// if a->c is not possible, try c->a
+					moves.add(1); // source peg
+					moves.add(2); // destination
+
+					// add to the end of right
+					// the element you removed
+					// from the end of center
+					right.add(center.remove());
+				}
+			}
+		}
 	}
 
 }
